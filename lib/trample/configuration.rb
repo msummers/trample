@@ -7,6 +7,22 @@ module Trample
       instance_eval(&block)
     end
 
+    @concurrency_delay_max = nil
+    def concurrency_delay_max(*value)
+      @concurrency_delay_max = value.first unless value.empty?
+      @concurrency_delay_max
+    end
+
+    def http_basic_auth_user(*value)
+      @http_basic_auth_user = value.first unless value.empty?
+      @http_basic_auth_user
+    end
+
+    def http_basic_auth_password(*value)
+      @http_basic_auth_password = value.first unless value.empty?
+      @http_basic_auth_password
+    end
+
     def concurrency(*value)
       @concurrency = value.first unless value.empty?
       @concurrency

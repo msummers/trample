@@ -1,11 +1,13 @@
 module Trample
   class Page
     attr_reader :request_method
+    attr_accessor :result
 
     def initialize(request_method, url, parameters = {})
       @request_method = request_method
       @url            = url
       @parameters     = parameters
+      @result         = nil
     end
 
     def parameters

@@ -16,28 +16,32 @@ class Test::Unit::TestCase
   end
 
   def mock_get(url, opts={})
-    mock(RestClient).get(url, :cookies => opts[:cookies] || {}).times(opts[:times]) do
+    opts[:times].times do
+      mock(foo = RestClient::Resource.new(url, :cookies => opts[:cookies] || {}))
       response = RestClient::Response.new("", stub!)
       stub(response).cookies { opts[:return_cookies] || {} }
       stub(response).code { 200 }
+      foo.get {response}
     end
   end
 
   def mock_post(url, opts={})
-    mock(RestClient).post(url, opts[:payload],
-                               :cookies => opts[:cookies] || {}).times(opts[:times]) do
+    opts[:times].times do
+      mock(foo = RestClient::Resource.new(url, :user => opts[:user], :password => opts[:password], :cookies => opts[:cookies] || {}))
       response = RestClient::Response.new("", stub!)
       stub(response).cookies { opts[:return_cookies] || {} }
       stub(response).code { 200 }
+      foo.post(opts) {response}
     end
   end
 
   def stub_get(url, opts = {})
-    stub(RestClient).get(url, :cookies => opts[:cookies] || {}).times(opts[:times]) do
+    opts[:times].times do
+      stub(foo = RestClient::Resource.new(url, :cookies => opts[:cookies] || {}))
       response = RestClient::Response.new("", stub!)
       stub(response).cookies { opts[:return_cookies] || {} }
       stub(response).code { 200 }
+      foo.get {response}
     end
   end
 end
-

@@ -15,6 +15,7 @@ module Trample
       config.concurrency.times do
         thread = Thread.new(@config) do |c|
           Session.new(c).trample
+          sleep(rand(@config.concurrency_delay_max)) unless @config.concurrency_delay_max.nil?
         end
         threads << thread
       end

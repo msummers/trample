@@ -41,21 +41,14 @@ class SessionTest < Test::Unit::TestCase
 
   context "If a page responds with a cookie" do
     should "pass that cookie on to the next page" do
-      stub(RestClient).get(anything, anything) do
-        response = RestClient::Response.new("", stub!)
-        stub(response).cookies { {"xyz" => "abc"} }
-        stub(response).code { 200 }
-      end
 
       @config = Trample::Configuration.new do
         iterations 2
         get "http://amazon.com/"
       end
 
-      @session = Trample::Session.new(@config)
-      @session.trample
-
-      assert_received(RestClient) { |c| c.get("http://amazon.com/", :cookies => {"xyz" => "abc"}) }
+      stub_get("http://amazon.com/", :cookies => {"xyz" => "abc"}, :times => 2)
+      @session = Trample::Session.new(@config).trample
     end
   end
 
@@ -65,6 +58,8 @@ class SessionTest < Test::Unit::TestCase
     should "hit the login once at the beginning of the session" do
       @config = Trample::Configuration.new do
         iterations 2
+        http_basic_auth_user 'xyz'
+        http_basic_auth_password 'swordfish'
         login do
           post "http://google.com/login" do
             {:user => "xyz", :password => "swordfish"}
@@ -72,10 +67,9 @@ class SessionTest < Test::Unit::TestCase
         end
         get "http://google.com/"
       end
-      stub_get(anything, :times => 2)
-      mock_post("http://google.com/login", :payload => {:user => "xyz", :password => "swordfish"}, :times => 1)
+      mock_post("http://google.com/login", :user => 'xyz', :password => 'swordfish', :times => 1)
+      stub_get("http://google.com/", :times => 2)
       Trample::Session.new(@config).trample
     end
   end
 end
-
