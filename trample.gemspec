@@ -5,10 +5,15 @@ Gem::Specification.new do |s|
   s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["James Golick"]
-  s.date = %q{2009-06-04}
+  s.authors = ["Mike Summers"]
+  s.date = %q{2009-07-08}
   s.default_executable = %q{trample}
-  s.email = %q{james@giraffesoft.ca}
+
+  s.add_dependency('thor', '>=0.9.9')
+  s.add_dependency('sevenwire-rest-client', '>=0.9.6')
+  s.add_dependency('log4r', '>=1.0.5')
+
+  s.email = %q{msummers57@gmail.com}
   s.executables = ["trample"]
   s.extra_rdoc_files = [
     "LICENSE",
