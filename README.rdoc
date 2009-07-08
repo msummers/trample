@@ -15,8 +15,8 @@ That way, you can have trample log in as several different users and request dif
 Trample uses a ruby DSL for configuration.
   
   Trample.configure do
-  concurrency 4
-  iterations  1
+  concurrency 5
+  iterations  10
   http_basic_auth_user
   http_basic_auth_password
   # maximum sleep between threads in seconds
